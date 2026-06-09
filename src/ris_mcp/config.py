@@ -17,8 +17,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 def _default_cache_path() -> Path:
     """Liefert den Standard-Pfad fuer die SQLite-Cache-Datei.
 
-    Auf macOS landet das unter ``~/Library/Caches/ris-mcp/cache.db``,
-    auf Linux unter ``~/.cache/ris-mcp/cache.db``.
+    Plattformaware via ``platformdirs``:
+
+    * macOS:   ``~/Library/Caches/ris-mcp/cache.db``
+    * Linux:   ``~/.cache/ris-mcp/cache.db``
+    * Windows: ``%LOCALAPPDATA%\\ris-mcp\\Cache\\cache.db``
     """
     base = Path(user_cache_dir(appname="ris-mcp", appauthor=False))
     base.mkdir(parents=True, exist_ok=True)

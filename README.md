@@ -85,23 +85,41 @@ Requires [uv](https://docs.astral.sh/uv/) and Python ≥ 3.12.
 
 In your client's MCP config (e.g. Msty: Settings → MCP, or an `mcp.json`):
 
+**macOS / Linux:**
+
 ```jsonc
 {
   "mcpServers": {
     "ris": {
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--directory", "/path/to/ris-mcp", "ris-mcp"]
+      "args": ["run", "--directory", "/Users/you/projects/ris-mcp", "ris-mcp"]
     }
   }
 }
 ```
 
-Adjust the path and restart the client — all tools then appear under the
-server `ris`.
+**Windows** (forward slashes work; backslashes must be escaped as `\\`):
 
-> **macOS tip:** use the **absolute path** to `uv` (find it with `which uv`).
-> Apps launched from the Dock get a minimal `PATH`, so a bare `"command":
-> "uv"` may fail to start the server intermittently.
+```jsonc
+{
+  "mcpServers": {
+    "ris": {
+      "command": "C:/Users/you/.local/bin/uv.exe",
+      "args": ["run", "--directory", "C:/Users/you/projects/ris-mcp", "ris-mcp"]
+    }
+  }
+}
+```
+
+Adjust paths and restart the client — all tools then appear under the server
+`ris`.
+
+> **Use the absolute path to `uv`.** Apps launched from the Dock (macOS) or
+> the Start menu (Windows) get a minimal `PATH`, so a bare `"uv"` may fail
+> to start the server intermittently. Find the absolute path with:
+> - macOS / Linux: `which uv`
+> - Windows (PowerShell): `(Get-Command uv).Source`
+> - Windows (cmd): `where uv`
 
 ## Examples
 
@@ -134,13 +152,17 @@ knowledge, only verbatim from RIS.
 
 ## Cache
 
-A single SQLite file (`~/Library/Caches/ris-mcp/cache.db` on macOS,
-`~/.cache/ris-mcp/cache.db` on Linux) with three areas: `search_cache`
-(search results, 24 h TTL), `document_cache` (full texts, 30-day TTL,
-historical versions kept permanently) and `meta` (HTTP ETag / Last-Modified
-per URL for conditional requests). An FTS5 index over the cached texts backs
-`ris_local_search`. The cache lives outside the repo; delete the file to
-reset.
+A single SQLite file, located via `platformdirs`:
+
+- macOS: `~/Library/Caches/ris-mcp/cache.db`
+- Linux: `~/.cache/ris-mcp/cache.db`
+- Windows: `%LOCALAPPDATA%\ris-mcp\Cache\cache.db`
+
+Three areas: `search_cache` (search results, 24 h TTL), `document_cache`
+(full texts, 30-day TTL, historical versions kept permanently) and `meta`
+(HTTP ETag / Last-Modified per URL for conditional requests). An FTS5 index
+over the cached texts backs `ris_local_search`. The cache lives outside the
+repo; delete the file to reset.
 
 Settings can be overridden via `RIS_MCP_*` environment variables
 (see [`src/ris_mcp/config.py`](src/ris_mcp/config.py)).
