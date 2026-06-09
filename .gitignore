@@ -1,0 +1,28 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+.coverage
+.DS_Store
+
+# Cache-Datenbank (lokal, nicht ins Repo)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Editor
+.idea/
+.vscode/
+
+# Privates (nicht ins öffentliche Repo)
+literatur-systemprompt.md
+
+# Scratch / Smoke-Tests
+_t_*.py
+_t2_*.py
